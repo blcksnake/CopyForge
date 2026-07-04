@@ -1,3 +1,4 @@
 # CopyForge — Python dependencies
 customtkinter>=5.2.0
-blake3>=0.3.0
+# Optional acceleration (engine falls back to hashlib when unavailable)
+# blake3>=0.3.0
