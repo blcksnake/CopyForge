@@ -1,0 +1,3 @@
+# CopyForge — Python dependencies
+customtkinter>=5.2.0
+blake3>=0.3.0
