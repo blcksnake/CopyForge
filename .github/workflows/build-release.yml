@@ -1,0 +1,52 @@
+name: Build Portable EXE
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE
+        run: python build_exe.py
+
+      - name: Package portable build
+        shell: pwsh
+        run: |
+          $assetName = "CopyForge-${{ github.ref_name }}-portable-win64.zip"
+          if (Test-Path $assetName) { Remove-Item $assetName -Force }
+          Compress-Archive -Path dist/CopyForge/* -DestinationPath $assetName
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CopyForge-portable-win64
+          path: CopyForge-*-portable-win64.zip
+
+      - name: Publish GitHub Release asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CopyForge-*-portable-win64.zip
+          generate_release_notes: true
