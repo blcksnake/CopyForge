@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build:
+    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '.') && !contains(github.ref_name, '-')
     runs-on: windows-latest
 
     steps:
@@ -43,11 +44,11 @@ jobs:
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CopyForge-portable-win64
+          name: CopyForge-${{ github.ref_name }}-portable-win64
           path: CopyForge-*-portable-win64.zip
 
       - name: Publish GitHub Release asset
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '.') && !contains(github.ref_name, '-')
         uses: softprops/action-gh-release@v2
         with:
           files: CopyForge-*-portable-win64.zip
