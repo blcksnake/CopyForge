@@ -1,34 +1,56 @@
 # CopyForge
 
-CopyForge is a Python desktop app packaged as a portable Windows executable.
+CopyForge is a Windows desktop file transfer tool for copying large file sets with verification, retries, and clear transfer visibility.
 
-## Versioning Policy
+It is designed for reliable copy jobs to local disks, external drives, and network paths.
 
-- Use major versions only: `v1`, `v2`, `v3`.
-- Do not create patch tags like `v1.0.1`.
-- Bump the version only for major changes.
+## What CopyForge does
 
-## Download Portable EXE
+- Copies files and folders with a modern queue-based interface
+- Runs concurrent transfers with 1 to 8 workers
+- Verifies file integrity with hash checks
+- Supports BLAKE3, SHA256, SHA512, SHA1, and MD5
+- Handles long Windows paths and UNC network paths
+- Provides pause, resume, skip, and stop controls
+- Retries failed files automatically
+- Exports transfer reports to HTML or CSV
 
-1. Open the repository Releases page.
-2. Download the latest `CopyForge-*-portable-win64.zip` asset.
-3. Extract the zip and run `CopyForge.exe`.
+## Main workflow
 
-## Publish a New Portable EXE
+1. Add a source (files or folder)
+2. Choose destination folder
+3. Adjust options in the Options tab
+4. Let CopyForge run the queue
+5. Review results and export a report if needed
 
-This repo includes a GitHub Actions workflow that builds and publishes the portable EXE automatically when you push a version tag.
+## Transfer options
 
-1. Commit and push your code changes.
-2. Create a major version tag locally:
+- Include sub-folders
+- Verify files after transfer
+- Overwrite mode:
+	- overwrite_all
+	- overwrite_newer
+	- skip_existing
+- Hash algorithm
+- Max retries per file
+- Buffer size in MB
+- Parallel worker count
+
+## Run from source
+
+Requirements:
+
+- Windows
+- Python 3.10 or newer
+
+Install and run:
 
 ```powershell
-git tag v1
-git push origin v1
+pip install -r requirements.txt
+python main.py
 ```
 
-3. GitHub Actions builds the app and uploads `CopyForge-<tag>-portable-win64.zip` to the Release.
-
-## Manual Build (Local)
+## Build portable EXE locally
 
 ```powershell
 pip install -r requirements.txt
@@ -36,6 +58,33 @@ pip install pyinstaller
 python build_exe.py
 ```
 
-Output folder:
+Portable output:
 
-- `dist/CopyForge/`
+- dist/CopyForge/CopyForge.exe
+
+## Download portable EXE
+
+1. Open the repository Releases page
+2. Download the latest CopyForge-vX-portable-win64.zip asset
+3. Extract and run CopyForge.exe
+
+## Release process
+
+This repository uses GitHub Actions to build and publish the portable EXE from tags.
+
+Create a release tag:
+
+```powershell
+git tag v1
+git push origin v1
+```
+
+The workflow builds on Windows and publishes:
+
+- CopyForge-v1-portable-win64.zip
+
+## Versioning policy
+
+- Use major tags only: v1, v2, v3
+- Increase the major tag only for major changes
+- Do not use patch tags such as v1.0.1
