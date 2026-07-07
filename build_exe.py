@@ -114,7 +114,7 @@ def build_exe():
         print(f"Using icon: {icon_path}")
         print(f"Wrote version metadata: {version_file}")
     except Exception as e:
-        print(f"✗ Asset preparation failed: {e}")
+        print(f"[ERROR] Asset preparation failed: {e}")
         return False
     
     # Clean previous builds
@@ -122,7 +122,7 @@ def build_exe():
     for d in [dist_dir, build_dir]:
         if d.exists():
             shutil.rmtree(d)
-            print(f"  ✓ Removed {d.name}/")
+            print(f"  [OK] Removed {d.name}/")
     
     # Build with PyInstaller
     print("\nBuilding executable with PyInstaller...")
@@ -135,11 +135,11 @@ def build_exe():
     
     try:
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-        print("✓ Build successful!")
+        print("[OK] Build successful!")
         if result.stdout:
             print(result.stdout)
     except subprocess.CalledProcessError as e:
-        print(f"✗ Build failed!")
+        print("[ERROR] Build failed!")
         print(e.stderr)
         return False
     
@@ -147,7 +147,7 @@ def build_exe():
     exe_path = dist_dir / "CopyForge" / "CopyForge.exe"
     if exe_path.exists():
         size_mb = exe_path.stat().st_size / (1024*1024)
-        print(f"\n✓ Executable created: {exe_path}")
+        print(f"\n[OK] Executable created: {exe_path}")
         print(f"  Size: {size_mb:.1f} MB")
         print(f"\nExecutable location:")
         print(f"  {exe_path}")
@@ -156,7 +156,7 @@ def build_exe():
         print(f"  CopyForge.exe")
         return True
     else:
-        print(f"✗ Executable not found at {exe_path}")
+        print(f"[ERROR] Executable not found at {exe_path}")
         return False
 
 if __name__ == "__main__":
