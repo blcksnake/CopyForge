@@ -13,6 +13,10 @@ if os.name == "nt":
 
 
 def _check_deps():
+    # PyInstaller bundles dependencies inside the executable; skip source checks.
+    if getattr(sys, "frozen", False):
+        return
+
     missing = [pkg for pkg in ("customtkinter",)
                if importlib.util.find_spec(pkg) is None]
     if missing:
